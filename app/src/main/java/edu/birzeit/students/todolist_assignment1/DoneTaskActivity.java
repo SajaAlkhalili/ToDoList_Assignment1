@@ -77,14 +77,5 @@ public class DoneTaskActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Notify the adapter that the data set has changed
-        ArrayAdapter<String> adapter = (ArrayAdapter<String>) listView.getAdapter();
-        if (adapter != null) {
-            adapter.notifyDataSetChanged();
-        }
-
-        if (taskList == null) {
-            taskList = new ArrayList<>();
-        }
     }
 }

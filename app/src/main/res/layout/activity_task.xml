@@ -19,7 +19,8 @@
         android:textAlignment="center"
         android:textColor="#F8F5F5"
         android:textSize="35sp"
-        android:textStyle="bold|italic" />
+        android:textStyle="bold|italic"
+       />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -33,7 +34,10 @@
         <ListView
             android:id="@+id/lview_tasks"
             android:layout_width="match_parent"
-            android:layout_height="578dp" />
+            android:layout_height="578dp"
+            android:divider="@color/white"
+            android:dividerHeight="2dp"
+            android:listSelector="@color/purple_200" />
 
         <View
             android:id="@+id/divider"
