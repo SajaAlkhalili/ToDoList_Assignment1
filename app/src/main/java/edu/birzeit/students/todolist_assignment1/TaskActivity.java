@@ -28,6 +28,7 @@ public class TaskActivity extends AppCompatActivity {
     private TextView customtext;
     private Gson gson;
     private CheckBox checkBox;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +38,9 @@ public class TaskActivity extends AppCompatActivity {
         setupViews();
         loadTasks();
 
-//        ArrayAdapter<Task> listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
-//        listView.setAdapter(listAdapter);
-        CustomBaseAdapter customAdapter=new CustomBaseAdapter(getApplicationContext(),items);
-        listView.setAdapter(customAdapter);
+        ArrayAdapter<Task> listAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        listView.setAdapter(listAdapter);
+
 
 
         clickListView();
@@ -51,8 +51,7 @@ public class TaskActivity extends AppCompatActivity {
         input = findViewById(R.id.edittxt);
         items = new ArrayList<>();
         listView = findViewById(R.id.lview_tasks);
-        customtext=findViewById(R.id.textv);
-        checkBox=findViewById(R.id.chbox);
+
     }
 
     private void setupListViewAdapter() {
@@ -62,7 +61,7 @@ public class TaskActivity extends AppCompatActivity {
                 Context context = getApplicationContext();
                 Toast.makeText(context, "Task removed", Toast.LENGTH_LONG).show();
                 items.remove(i);
-                CustomBaseAdapter  adapter = (CustomBaseAdapter) listView.getAdapter();
+                ArrayAdapter<Task>  adapter = (ArrayAdapter<Task>) listView.getAdapter();
                 if (adapter != null) {
                     adapter.notifyDataSetChanged();
                 }
@@ -101,33 +100,31 @@ public class TaskActivity extends AppCompatActivity {
     private void clickListView() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
 
-
-                customtext.setPaintFlags(customtext.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
-                String taskTitle = customtext.getText().toString();
-
-                Task clickedTask = getTaskByTitle(taskTitle);
-
-                if (clickedTask != null && !clickedTask.isDone()) {
-                    // Mark the task as "Done"
-                    clickedTask.setDone(true);
-                    boolean isChecked = checkBox.isChecked();
-                    editor.putBoolean("checkbox_" + i, isChecked);
-                    editor.apply();
-                    // Update the adapter
-                    CustomBaseAdapter adapter = (CustomBaseAdapter) listView.getAdapter();
-                    if (adapter != null) {
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    // Save the tasks to shared preferences
-                    saveTasksToSharedPreferences();
-
-//                    Intent intent = new Intent(TaskActivity.this, DoneTaskActivity.class);
-//                    intent.putExtra("data", taskTitle);
-//                    startActivity(intent);
+                String taskTitle   = items.get(i).getTitle();
+                Intent intent = new Intent(TaskActivity.this, TaskDetail.class);
+                intent.putExtra("data", taskTitle);
+                intent.putExtra("id",id);
+                startActivity(intent);
+                ArrayAdapter<Task> adapter = (ArrayAdapter<Task>) listView.getAdapter();
+                if (adapter != null) {
+                    adapter.notifyDataSetChanged();
                 }
+                saveTasksToSharedPreferences();
+
+                textView = (TextView) view;
+                textView.setPaintFlags(textView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+
+
+                prefs = getSharedPreferences("MyPreferences", Context.MODE_PRIVATE);
+
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putBoolean(taskTitle, true);
+                editor.apply();
+
+
             }
         });
     }
@@ -143,7 +140,7 @@ public class TaskActivity extends AppCompatActivity {
 
     public void addTask(Task newItem) {
         items.add(newItem);
-        CustomBaseAdapter  adapter =  (CustomBaseAdapter)listView.getAdapter();
+        ArrayAdapter<Task>  adapter = (ArrayAdapter<Task>) listView.getAdapter();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
             listView.setSelection(adapter.getCount() - 1);

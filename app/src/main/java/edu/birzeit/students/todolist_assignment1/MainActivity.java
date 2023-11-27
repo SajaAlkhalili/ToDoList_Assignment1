@@ -22,13 +22,7 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, TaskActivity.class);
                     startActivity(intent);
                 }
-                else if(position == 1){
-                    Intent intent = new Intent(MainActivity.this, DoneTaskActivity.class);
-                    startActivity(intent);
-                }
-                else{
 
-                }
             }
         };
 

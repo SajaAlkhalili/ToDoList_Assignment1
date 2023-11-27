@@ -2,7 +2,7 @@
     <string name="app_name">ToDoList_Assignment1</string>
 
     <string-array name="options">
-        <item><font color="@color/white" ><big>All</big></font></item>
-<!--        <item>Done</item>-->
+        <item><font color="@color/white"><big>All</big></font></item>
+        <!--        <item>Done</item>-->
     </string-array>
 </resources>
